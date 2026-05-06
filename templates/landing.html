@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Bem-vindo{% endblock %}
+
+{% block content %}
+<div class="row align-items-center min-vh-75 mt-5">
+    <div class="col-md-6 text-center text-md-start">
+        <h1 class="display-4 fw-bold mb-4" style="color: var(--ecc-blue);">Encontro de Casais com Cristo</h1>
+        <p class="lead text-muted mb-5">Construindo famílias sólidas através do amor, da fé e do diálogo. Junte-se a nós em Araguaína para transformar seu matrimônio.</p>
+        
+        {% if encontro %}
+            <div class="card card-custom p-4 bg-white mb-4">
+                <h4 class="fw-bold mb-3"><i class="fas fa-calendar-alt text-warning me-2"></i>Próximo Encontro</h4>
+                <h5 class="text-primary mb-2">ECC Nº {{ encontro.numero }}</h5>
+                <p class="mb-1"><i class="fas fa-clock me-2 text-muted"></i>{{ encontro.data_inicio|date:"d/m/Y" }} até {{ encontro.data_fim|date:"d/m/Y" }}</p>
+                <p class="mb-0">
+                    <span class="badge {% if encontro.status == 'PLANEJAMENTO' %}bg-secondary{% else %}bg-success{% endif %}">
+                        {{ encontro.get_status_display }}
+                    </span>
+                </p>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>Novas datas de encontros serão divulgadas em breve.
+            </div>
+        {% endif %}
+        
+        <a href="{% url 'admin:index' %}" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm" style="background-color: var(--ecc-blue); border-color: var(--ecc-blue);">
+            Área do Encontreiro <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+    <div class="col-md-6 mt-5 mt-md-0 d-none d-md-block">
+        <div class="p-5 rounded-circle shadow-lg d-flex align-items-center justify-content-center" style="background-color: #f0f4f8; width: 400px; height: 400px; margin: 0 auto;">
+            <i class="fas fa-hands-holding-heart fa-10x" style="color: var(--ecc-blue); opacity: 0.8;"></i>
+        </div>
+    </div>
+</div>
+{% endblock %}

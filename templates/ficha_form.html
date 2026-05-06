@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Ficha de Inscrição (Ficha 43){% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10 mt-4">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--ecc-blue);">Ficha de Inscrição (Ficha 43)</h2>
+            <p class="text-muted">Preencha os dados abaixo com atenção. Estas informações nos ajudarão a preparar o melhor encontro para você e sua família.</p>
+        </div>
+
+        <form method="post" class="needs-validation">
+            {% csrf_token %}
+            
+            <div class="row">
+                <!-- Dados do Marido -->
+                <div class="col-md-6 mb-4">
+                    <div class="card card-custom h-100 border-0 shadow-sm">
+                        <div class="card-header bg-primary text-white pt-3 pb-2">
+                            <h5 class="mb-0"><i class="fas fa-male me-2"></i>Dados do Marido</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Profissão</label>
+                                {{ form.profissao_marido }}
+                                {% if form.profissao_marido.errors %}<div class="text-danger small">{{ form.profissao_marido.errors }}</div>{% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Local de Trabalho</label>
+                                {{ form.local_trabalho_marido }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Religião</label>
+                                {{ form.religiao_marido }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Alergias (Alimentares ou Medicamentos)</label>
+                                {{ form.alergias_marido }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dados da Esposa -->
+                <div class="col-md-6 mb-4">
+                    <div class="card card-custom h-100 border-0 shadow-sm" style="border-top: 4px solid #e84393 !important;">
+                        <div class="card-header pt-3 pb-2" style="background-color: #fd79a8; color: white;">
+                            <h5 class="mb-0"><i class="fas fa-female me-2"></i>Dados da Esposa</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Profissão</label>
+                                {{ form.profissao_esposa }}
+                                {% if form.profissao_esposa.errors %}<div class="text-danger small">{{ form.profissao_esposa.errors }}</div>{% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Local de Trabalho</label>
+                                {{ form.local_trabalho_esposa }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Religião</label>
+                                {{ form.religiao_esposa }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Alergias (Alimentares ou Medicamentos)</label>
+                                {{ form.alergias_esposa }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Informações Gerais da Família -->
+                <div class="col-12 mb-4">
+                    <div class="card card-custom border-0 shadow-sm">
+                        <div class="card-header bg-secondary text-white pt-3 pb-2">
+                            <h5 class="mb-0"><i class="fas fa-home me-2"></i>Família e Saúde Geral</h5>
+                        </div>
+                        <div class="card-body row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Filhos (Nomes e Idades)</label>
+                                {{ form.filhos_nomes_idades }}
+                                <div class="form-text">Ex: João (12 anos), Maria (8 anos)</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Medicação de Uso Contínuo</label>
+                                {{ form.medicacao_uso_continuo }}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Outras Restrições Alimentares</label>
+                                {{ form.restricoes_alimentares }}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3 d-flex align-items-center mt-md-4">
+                                <div class="form-check form-switch fs-5">
+                                    {{ form.casados_igreja }}
+                                    <label class="form-check-label fw-bold ms-2" for="{{ form.casados_igreja.id_for_label }}">Somos casados na Igreja Católica</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mb-5 mt-2">
+                <button type="submit" class="btn btn-success btn-lg px-5 py-3 rounded-pill shadow">
+                    <i class="fas fa-save me-2"></i>Salvar Ficha de Inscrição
+                </button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}
