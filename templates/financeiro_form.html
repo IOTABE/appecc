@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_new %}Nova Movimentação{% else %}Editar Movimentação{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 mt-4">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--ecc-blue);">
+                {% if is_new %}Nova Movimentação{% else %}Editar Movimentação{% endif %}
+            </h2>
+            <p class="text-muted">Registre a entrada ou saída com lançamentos contábeis</p>
+        </div>
+
+        <form method="post" class="needs-validation">
+            {% csrf_token %}
+
+            <div class="card card-custom border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Dados da Movimentação</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Encontro <span class="text-danger">*</span></label>
+                            {{ form.encontro }}
+                            {% if form.encontro.errors %}<div class="text-danger small">{{ form.encontro.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Valor Total <span class="text-danger">*</span></label>
+                            {{ form.valor_total }}
+                            {% if form.valor_total.errors %}<div class="text-danger small">{{ form.valor_total.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Descrição <span class="text-danger">*</span></label>
+                            {{ form.descricao }}
+                            {% if form.descricao.errors %}<div class="text-danger small">{{ form.descricao.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-custom border-0 shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Lançamentos Contábeis</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-3">Selecione apenas contas de Nível 3 (Analíticas) para os lançamentos.</p>
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Conta (Apenas Analíticas)</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for form in formset %}
+                            <tr>
+                                <td>
+                                    {{ form.conta }}
+                                    {% if form.conta.errors %}<div class="text-danger small">{{ form.conta.errors }}</div>{% endif %}
+                                </td>
+                                <td>
+                                    {{ form.tipo }}
+                                    {% if form.tipo.errors %}<div class="text-danger small">{{ form.tipo.errors }}</div>{% endif %}
+                                </td>
+                                <td>
+                                    {{ form.valor }}
+                                    {% if form.valor.errors %}<div class="text-danger small">{{ form.valor.errors }}</div>{% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {{ form.DELETE }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {{ formset.management_form }}
+                </div>
+            </div>
+
+            <div class="text-center mt-4 mb-5">
+                <a href="{% url 'financeiro_list' %}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill me-3">
+                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                </a>
+                <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow">
+                    <i class="fas fa-save me-2"></i>Salvar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

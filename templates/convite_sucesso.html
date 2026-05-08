@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscrição Confirmada{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 mt-5">
+        <div class="text-center">
+            <div class="mb-4">
+                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+            </div>
+            <h2 class="fw-bold text-success mb-3">Inscrição Confirmada!</h2>
+            <p class="lead">
+                {{ casal.nome_marido }} e {{ casal.nome_esposa }},<br>
+                sua inscrição no ECC foi realizada com sucesso.
+            </p>
+            <p class="text-muted">Aguarde contato dos coordenadores para mais informações.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary rounded-pill px-4 mt-3">
+                <i class="fas fa-home me-2"></i>Início
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

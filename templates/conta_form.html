@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_new %}Nova Conta Contábil{% else %}Editar Conta Contábil{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 mt-4">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--ecc-blue);">
+                {% if is_new %}Nova Conta Contábil{% else %}Editar Conta Contábil{% endif %}
+            </h2>
+            <p class="text-muted">Níveis 1 e 2 são agrupadores (Sintética), nível 3 é para lançamentos (Analítica)</p>
+        </div>
+
+        <form method="post" class="needs-validation">
+            {% csrf_token %}
+
+            <div class="card card-custom border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Código <span class="text-danger">*</span></label>
+                        {{ form.codigo }}
+                        <div class="form-text">Ex: 1.0.0 (N1), 1.1.0 (N2), 1.1.1 (N3)</div>
+                        {% if form.codigo.errors %}<div class="text-danger small">{{ form.codigo.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome <span class="text-danger">*</span></label>
+                        {{ form.nome }}
+                        {% if form.nome.errors %}<div class="text-danger small">{{ form.nome.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tipo <span class="text-danger">*</span></label>
+                        {{ form.tipo }}
+                        {% if form.tipo.errors %}<div class="text-danger small">{{ form.tipo.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nível <span class="text-danger">*</span></label>
+                        {{ form.nivel }}
+                        <div class="form-text">
+                            <strong>Nível 1:</strong> Conta principal (agrupadora)<br>
+                            <strong>Nível 2:</strong> Sub-conta (agrupadora)<br>
+                            <strong>Nível 3:</strong> Conta analítica (aceita lançamentos)
+                        </div>
+                        {% if form.nivel.errors %}<div class="text-danger small">{{ form.nivel.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Conta Pai</label>
+                        {{ form.conta_pai }}
+                        <div class="form-text">Selecione a conta de nível superior (obrigatório para Níveis 2 e 3)</div>
+                        {% if form.conta_pai.errors %}<div class="text-danger small">{{ form.conta_pai.errors }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 mb-5">
+                <a href="{% url 'conta_list' %}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill me-3">
+                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                </a>
+                <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow">
+                    <i class="fas fa-save me-2"></i>Salvar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

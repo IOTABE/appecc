@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_new %}Novo Usuário{% else %}Editar Usuário{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 mt-4">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--ecc-blue);">
+                {% if is_new %}Novo Usuário{% else %}Editar Usuário{% endif %}
+            </h2>
+            <p class="text-muted">Cadastro do casal no sistema</p>
+        </div>
+
+        <form method="post" class="needs-validation">
+            {% csrf_token %}
+
+            <div class="card card-custom border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome de Usuário <span class="text-danger">*</span></label>
+                        {{ form.username }}
+                        {% if form.username.errors %}<div class="text-danger small">{{ form.username.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nova Senha</label>
+                        {{ form.password }}
+                        {% if form.password.errors %}<div class="text-danger small">{{ form.password.errors }}</div>{% endif %}
+                        <div class="form-text">{% if is_new %}Senha deve ter pelo menos 8 caracteres.{% else %}Deixe em branco para manter a senha atual.{% endif %}</div>
+                    </div>
+
+                    <hr>
+
+                    <h5 class="mb-3">Dados do Casal</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome do Marido</label>
+                        {{ form.nome_marido }}
+                        {% if form.nome_marido.errors %}<div class="text-danger small">{{ form.nome_marido.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome da Esposa</label>
+                        {{ form.nome_esposa }}
+                        {% if form.nome_esposa.errors %}<div class="text-danger small">{{ form.nome_esposa.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Celular Marido</label>
+                            {{ form.celular_marido }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Celular Esposa</label>
+                            {{ form.celular_esposa }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Perfil na Diretoria</label>
+                        {{ form.perfil }}
+                        {% if form.perfil.errors %}<div class="text-danger small">{{ form.perfil.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        {{ form.associado }}
+                        <label class="form-check-label" for="{{ form.associado.id_for_label }}">Associado ativo</label>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        {{ form.is_active }}
+                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">Usuário ativo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 mb-5">
+                <a href="{% url 'usuario_list' %}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill me-3">
+                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                </a>
+                <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow">
+                    <i class="fas fa-save me-2"></i>Salvar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

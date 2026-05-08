@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir Usuário{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 mt-4">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <h3 class="fw-bold text-danger">Confirmar Exclusão</h3>
+                <p class="mt-3">Tem certeza que deseja excluir o usuário?</p>
+                <p class="fw-bold">{{ casal.username }}</p>
+                <p class="text-muted">{{ casal.nome_marido }} / {{ casal.nome_esposa }}</p>
+
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <a href="{% url 'usuario_list' %}" class="btn btn-outline-secondary rounded-pill px-4 me-2">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">
+                        <i class="fas fa-trash me-2"></i>Excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

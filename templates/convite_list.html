@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Meus Convites{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold" style="color: var(--ecc-blue);">Gerar Link de Convite</h2>
+                <p class="text-muted">Crie links para convidar casais para o ECC</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Encontro</label>
+                        <select name="encontro" class="form-control" required>
+                            <option value="">Selecione...</option>
+                            {% for e in encontros %}
+                            <option value="{{ e.pk }}">ECC #{{ e.numero }} - {{ e.data_inicio|date:"d/m/Y" }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Nome do Casal (opcional)</label>
+                        <input type="text" name="nome_casal" class="form-control" placeholder="Ex: João e Maria">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success rounded-pill px-4">
+                            <i class="fas fa-link me-2"></i>Gerar Link
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if link_gerado %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <h5 class="alert-heading">Link Gerado!</h5>
+            <p class="mb-2">Compartilhe este link com o casal convidado:</p>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" id="linkConvite" value="{{ link_gerado }}" readonly>
+                <button class="btn btn-outline-success" type="button" onclick="copiarLink()">
+                    <i class="fas fa-copy"></i> Copiar
+                </button>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <h4 class="mt-4 mb-3">Meus Convites Gerados</h4>
+        <div class="table-responsive">
+            <table class="table table-hover shadow-sm rounded">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Encontro</th>
+                        <th>Casal Convidado</th>
+                        <th>Status</th>
+                        <th>Link</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in fichas %}
+                    <tr>
+                        <td>ECC #{{ f.encontro.numero }}</td>
+                        <td>{{ f.nome_casal_convidado|default:"-" }}</td>
+                        <td>
+                            {% if f.utilizada %}
+                            <span class="badge bg-success">Utilizado</span>
+                            {% else %}
+                            <span class="badge bg-warning">Pendente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="copiarLinkEspecifico('{% url 'convite_registro' f.token %}')">
+                                <i class="fas fa-copy"></i> Copiar
+                            </button>
+                        </td>
+                        <td>
+                            {% if not f.utilizada %}
+                            <form method="post" action="{% url 'convite_delete' f.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Excluir este convite?');">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">
+                            Nenhum convite gerado ainda.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fas fa-arrow-left me-2"></i>Voltar
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+function copiarLink() {
+    var copyText = document.getElementById("linkConvite");
+    copyText.select();
+    navigator.clipboard.writeText(copyText.value);
+    alert("Link copiado!");
+}
+
+function copiarLinkEspecifico(url) {
+    var fullUrl = window.location.origin + url;
+    navigator.clipboard.writeText(fullUrl);
+    alert("Link copiado!");
+}
+</script>
+{% endblock %}

@@ -1,8 +1,37 @@
 from django.urls import path
-from .views import HomeView, FichaInscricaoView, BalanceteView
+from .views import (
+    HomeView, FichaListView, FichaCreateView,
+    FichaEditView, FichaToggleAtivaView, BalanceteView,
+    EncontroListView, EncontroCreateView, EncontroEditView, EncontroDeleteView,
+    FinanceiroListView, FinanceiroCreateView, FinanceiroEditView, FinanceiroDeleteView,
+    ContaContabilListView, ContaContabilCreateView, ContaContabilEditView,
+    UsuarioListView, UsuarioCreateView, UsuarioEditView, UsuarioDeleteView,
+    ConviteListView, ConviteDeleteView, ConviteRegistroView,
+)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    path('ficha/', FichaInscricaoView.as_view(), name='ficha'),
+    path('encontros/', EncontroListView.as_view(), name='encontro_list'),
+    path('encontros/novo/', EncontroCreateView.as_view(), name='encontro_create'),
+    path('encontros/<int:pk>/editar/', EncontroEditView.as_view(), name='encontro_edit'),
+    path('encontros/<int:pk>/excluir/', EncontroDeleteView.as_view(), name='encontro_delete'),
+    path('fichas/', FichaListView.as_view(), name='ficha_list'),
+    path('fichas/nova/', FichaCreateView.as_view(), name='ficha_create'),
+    path('fichas/<int:pk>/editar/', FichaEditView.as_view(), name='ficha_edit'),
+    path('fichas/<int:pk>/toggle/', FichaToggleAtivaView.as_view(), name='ficha_toggle'),
     path('balancete/', BalanceteView.as_view(), name='balancete'),
+    path('financeiro/', FinanceiroListView.as_view(), name='financeiro_list'),
+    path('financeiro/nova/', FinanceiroCreateView.as_view(), name='financeiro_create'),
+    path('financeiro/<int:pk>/editar/', FinanceiroEditView.as_view(), name='financeiro_edit'),
+    path('financeiro/<int:pk>/excluir/', FinanceiroDeleteView.as_view(), name='financeiro_delete'),
+    path('contas/', ContaContabilListView.as_view(), name='conta_list'),
+    path('contas/nova/', ContaContabilCreateView.as_view(), name='conta_create'),
+    path('contas/<int:pk>/editar/', ContaContabilEditView.as_view(), name='conta_edit'),
+    path('usuarios/', UsuarioListView.as_view(), name='usuario_list'),
+    path('usuarios/novo/', UsuarioCreateView.as_view(), name='usuario_create'),
+    path('usuarios/<int:pk>/editar/', UsuarioEditView.as_view(), name='usuario_edit'),
+    path('usuarios/<int:pk>/excluir/', UsuarioDeleteView.as_view(), name='usuario_delete'),
+    path('convites/', ConviteListView.as_view(), name='convite_list'),
+    path('convites/<int:pk>/excluir/', ConviteDeleteView.as_view(), name='convite_delete'),
+    path('convite/<uuid:token>/', ConviteRegistroView.as_view(), name='convite_registro'),
 ]

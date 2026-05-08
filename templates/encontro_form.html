@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_new %}Novo Encontro{% else %}Editar Encontro{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 mt-4">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--ecc-blue);">
+                {% if is_new %}Novo Encontro{% else %}Editar Encontro{% endif %}
+            </h2>
+            <p class="text-muted">Preencha os dados do ECC</p>
+        </div>
+
+        <form method="post" class="needs-validation">
+            {% csrf_token %}
+
+            <div class="card card-custom border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Número do ECC <span class="text-danger">*</span></label>
+                        {{ form.numero }}
+                        {% if form.numero.errors %}<div class="text-danger small">{{ form.numero.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Data de Início <span class="text-danger">*</span></label>
+                        {{ form.data_inicio }}
+                        {% if form.data_inicio.errors %}<div class="text-danger small">{{ form.data_inicio.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Data de Término <span class="text-danger">*</span></label>
+                        {{ form.data_fim }}
+                        {% if form.data_fim.errors %}<div class="text-danger small">{{ form.data_fim.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status</label>
+                        {{ form.status }}
+                        {% if form.status.errors %}<div class="text-danger small">{{ form.status.errors }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 mb-5">
+                <a href="{% url 'encontro_list' %}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill me-3">
+                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                </a>
+                <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow">
+                    <i class="fas fa-save me-2"></i>Salvar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Contas Contábeis{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold" style="color: var(--ecc-blue);">Plano de Contas</h2>
+                <p class="text-muted">Até 3 níveis: 1 e 2 são agrupadoras, 3 é analítica (aceita lançamentos)</p>
+            </div>
+            <a href="{% url 'conta_create' %}" class="btn btn-success rounded-pill px-4">
+                <i class="fas fa-plus me-2"></i>Nova Conta
+            </a>
+        </div>
+
+        {% for tipo, contas_por_tipo in contas_agrupadas.items %}
+        <div class="card card-custom border-0 shadow-sm mb-4">
+            <div class="card-header bg-{% if tipo == 'RECEITA' %}success{% elif tipo == 'DESPESA' %}danger{% else %}info{% endif %} text-white">
+                <h5 class="mb-0">{{ tipo }}</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <tbody>
+                        {% for conta in contas_por_tipo %}
+                        <tr class="{% if conta.nivel == 1 %}table-secondary{% elif conta.nivel == 2 %}ps-4{% endif %}">
+                            <td style="padding-left: {{ conta.nivel|add:1 }}rem;">
+                                <span class="badge bg-{% if conta.nivel == 1 %}dark{% elif conta.nivel == 2 %}secondary{% else %}primary{% endif %} me-2">
+                                    N{{ conta.nivel }}
+                                </span>
+                                <strong>{{ conta.codigo }}</strong> - {{ conta.nome }}
+                                {% if conta.nivel == 3 %}
+                                <span class="badge bg-success ms-2">Analítica</span>
+                                {% else %}
+                                <span class="badge bg-light text-dark ms-2">Sintética</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <a href="{% url 'conta_edit' conta.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">Nenhuma conta contábil cadastrada.</div>
+        {% endfor %}
+
+        <div class="text-center mt-4">
+            <a href="{% url 'financeiro_list' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fas fa-arrow-left me-2"></i>Voltar
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

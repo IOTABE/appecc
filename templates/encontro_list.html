@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Encontros{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold" style="color: var(--ecc-blue);">Encontros</h2>
+                <p class="text-muted">Gerencie os ECCs realizados</p>
+            </div>
+            {% if pode_gerenciar %}
+            <a href="{% url 'encontro_create' %}" class="btn btn-success btn-lg px-4 rounded-pill shadow">
+                <i class="fas fa-plus me-2"></i>Novo Encontro
+            </a>
+            {% endif %}
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <div class="table-responsive">
+            <table class="table table-hover shadow-sm rounded">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Nº</th>
+                        <th>Início</th>
+                        <th>Fim</th>
+                        <th>Status</th>
+                        <th>Fichas</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in encontros %}
+                    <tr>
+                        <td class="fw-bold">ECC Nº {{ e.numero }}</td>
+                        <td>{{ e.data_inicio|date:"d/m/Y" }}</td>
+                        <td>{{ e.data_fim|date:"d/m/Y" }}</td>
+                        <td>
+                            {% if e.status == 'PLANEJAMENTO' %}
+                            <span class="badge bg-warning text-dark">Planejamento</span>
+                            {% elif e.status == 'ANDAMENTO' %}
+                            <span class="badge bg-success">Em Andamento</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Finalizado</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ e.fichas_inscricao.count }}</td>
+                        <td>
+                            {% if user.is_superuser %}
+                            <a href="{% url 'encontro_edit' e.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            {% if e.fichas_inscricao.count == 0 %}
+                            <a href="{% url 'encontro_delete' e.pk %}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            Nenhum encontro cadastrado.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fas fa-arrow-left me-2"></i>Voltar
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Movimentações Financeiras{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold" style="color: var(--ecc-blue);">Movimentações Financeiras</h2>
+                <p class="text-muted">Gerencie entradas e saídas</p>
+            </div>
+            <div>
+                <a href="{% url 'conta_list' %}" class="btn btn-outline-info rounded-pill me-2">
+                    <i class="fas fa-book me-1"></i>Contas Contábeis
+                </a>
+                <a href="{% url 'financeiro_create' %}" class="btn btn-success rounded-pill px-4">
+                    <i class="fas fa-plus me-2"></i>Nova Movimentação
+                </a>
+            </div>
+        </div>
+
+        <div class="card card-custom border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Filtrar por Encontro</label>
+                        <select name="encontro" class="form-select" onchange="this.form.submit()">
+                            <option value="">Todos os Encontros</option>
+                            {% for e in encontros %}
+                            <option value="{{ e.pk }}" {% if encontro_selecionado.pk == e.pk %}selected{% endif %}>
+                                ECC Nº {{ e.numero }} - {{ e.data_inicio|date:"d/m/Y" }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover shadow-sm rounded">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Data</th>
+                        <th>Encontro</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in movimentacoes %}
+                    <tr>
+                        <td>{{ m.data|date:"d/m/Y H:i" }}</td>
+                        <td>ECC Nº {{ m.encontro.numero }}</td>
+                        <td>{{ m.descricao }}</td>
+                        <td class="fw-bold text-success">R$ {{ m.valor_total|floatformat:2 }}</td>
+                        <td>
+                            <a href="{% url 'financeiro_edit' m.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'financeiro_delete' m.pk %}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">
+                            Nenhuma movimentação encontrada.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fas fa-arrow-left me-2"></i>Voltar
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
