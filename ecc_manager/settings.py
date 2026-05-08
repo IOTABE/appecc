@@ -12,22 +12,28 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+ENV_FILE = BASE_DIR / '.env'
+if ENV_FILE.exists():
+    with open(ENV_FILE) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                os.environ.setdefault(key.strip(), value.strip())
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^lbv!^uqj-b#-(all_v-m!#y0jckiw!a+rlh!cmvy$u_2jyulu'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')]
 
 
 # Application definition
@@ -75,13 +81,18 @@ WSGI_APPLICATION = 'ecc_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+import dj_database_url
+
+DATABASE_URL = os.environ.get('DATABASE_URL', f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}",
+        default=DATABASE_URL,
         conn_max_age=600,
         conn_health_checks=True,
     )
 }
+
 
 AUTH_USER_MODEL = 'core.Casal'
 
@@ -131,3 +142,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
