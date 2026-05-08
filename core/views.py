@@ -138,6 +138,7 @@ class FichaListView(View):
             'fichas': fichas,
             'total_ativas': total_ativas,
             'total_inativas': total_inativas,
+            'pode_gerenciar': pode_gerenciar_fichas(request.user),
         })
 
 

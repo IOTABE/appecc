@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ECC Araguaína - {% block title %}{% endblock %}</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,15 +14,54 @@
             --ecc-gold: #F6B93B;
             --ecc-light: #F8F9FA;
         }
+        * {
+            box-sizing: border-box;
+        }
+        html {
+            overflow-x: hidden;
+        }
         body {
             background-color: var(--ecc-light);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 60px !important;
+        }
+        .lgpd-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #1a1a2e;
+            color: white;
+            padding: 1rem;
+            z-index: 9999;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .lgpd-banner.show {
+            display: block;
+        }
+        .lgpd-banner a {
+            color: var(--ecc-gold);
         }
         .navbar-custom {
             background-color: var(--ecc-blue);
         }
         .navbar-custom .navbar-brand, .navbar-custom .nav-link {
             color: #ffffff;
+        }
+        .navbar-custom .nav-link {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+        }
+        .navbar-custom .nav-link:hover {
+            color: var(--ecc-gold);
+        }
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.5) !important;
+        }
+        .navbar-toggler-icon {
+            filter: invert(1);
         }
         .card-custom {
             border: none;
@@ -31,27 +70,82 @@
             transition: transform 0.2s;
         }
         .card-custom:hover {
-            transform: translateY(-5px);
+            transform: translateY(-2px);
         }
         .circulo-amarelo { border-left: 5px solid #F6E58D; }
         .circulo-azul { border-left: 5px solid #7ED6DF; }
         .circulo-verde { border-left: 5px solid #BADC58; }
         .circulo-vermelho { border-left: 5px solid #FF7979; }
+
+        /* Responsive utilities */
+        @media (max-width: 991px) {
+            .navbar-nav {
+                padding: 1rem 0;
+            }
+            .navbar-nav .nav-item {
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .navbar-nav .nav-item:last-child {
+                border-bottom: none;
+            }
+            .dropdown-menu {
+                background-color: rgba(255,255,255,0.1);
+                border: none;
+            }
+        }
+        @media (max-width: 767px) {
+            h1, h2 { font-size: 1.5rem !important; }
+            h3 { font-size: 1.25rem !important; }
+            .btn { width: 100%; margin-bottom: 0.5rem; }
+            .card-body { padding: 1rem; }
+            .table { font-size: 0.85rem; }
+            .table-responsive-sm { overflow-x: auto; }
+        }
+        @media (max-width: 575px) {
+            .container { padding-left: 0.75rem; padding-right: 0.75rem; }
+            .navbar-brand span { display: none; }
+            .badge { font-size: 0.75rem; }
+        }
+
+        /* Tables responsive */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Mobile-friendly buttons */
+        @media (max-width: 576px) {
+            .btn-group {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn-group .btn {
+                margin: 2px 0;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-custom mb-4">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}"><i class="fas fa-heart me-2"></i>ECC Araguaína</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+<nav class="navbar navbar-expand-lg navbar-custom mb-3 mb-md-4 sticky-top">
+    <div class="container-fluid px-2 px-md-3">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            <i class="fas fa-heart me-1 me-md-2"></i>
+            <span class="d-none d-sm-inline">ECC Araguaína</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Menu">
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
+                    <li class="nav-item d-lg-none">
+                        <span class="nav-link text-white-50"><small>{{ user.username }}</small></span>
+                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-chart-pie me-1"></i>Dashboard</a>
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-chart-pie me-1"></i><span class="d-none d-lg-inline">Dashboard</span><span class="d-lg-none">Home</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'encontro_list' %}"><i class="fas fa-calendar-alt me-1"></i>Encontros</a>
@@ -63,6 +157,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'financeiro_list' %}"><i class="fas fa-money-bill-wave me-1"></i>Financeiro</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'balancete' %}"><i class="fas fa-file-invoice-dollar me-1"></i>Balancete</a>
+                    </li>
                     {% endif %}
                     {% if user.is_superuser %}
                     <li class="nav-item">
@@ -72,19 +169,11 @@
                         <a class="nav-link" href="{% url 'usuario_list' %}"><i class="fas fa-users me-1"></i>Usuários</a>
                     </li>
                     {% endif %}
-                    {% if user.is_superuser or user.perfil == 'PRESIDENTE' or user.perfil == 'TESOUREIRO' %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'balancete' %}"><i class="fas fa-file-invoice-dollar me-1"></i>Balancete</a>
-                    </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <span class="nav-link"><i class="fas fa-user-circle me-1"></i>{{ user.username }}</span>
-                    </li>
                     <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}" style="display:inline;">
                             {% csrf_token %}
                             <button type="submit" class="nav-link btn btn-link text-warning">
-                                <i class="fas fa-sign-out-alt me-1"></i>Sair
+                                <i class="fas fa-sign-out-alt me-1"></i><span class="d-none d-lg-inline">Sair</span>
                             </button>
                         </form>
                     </li>
@@ -98,12 +187,100 @@
     </div>
 </nav>
 
-<div class="container pb-5">
+<div class="container-fluid px-2 px-md-3 pb-5">
     {% block content %}
     {% endblock %}
 </div>
 
 <!-- Bootstrap 5 JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- LGPD Banner -->
+<div id="lgpd-banner" class="lgpd-banner">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-9">
+                <p class="mb-1 mb-md-0">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    <strong>Aviso de Privacidade:</strong> Utilizamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa 
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#lgpdModal">Política de Privacidade</a>.
+                </p>
+            </div>
+            <div class="col-12 col-md-3 text-md-end mt-2 mt-md-0">
+                <button onclick="aceitarLGPD()" class="btn btn-success btn-sm px-3">
+                    <i class="fas fa-check me-1"></i> Aceitar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LGPD Modal -->
+<div class="modal fade" id="lgpdModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: var(--ecc-blue); color: white;">
+                <h5 class="modal-title"><i class="fas fa-shield-alt me-2"></i>Política de Privacidade e Uso de Dados</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h5>1. Coleta de Dados</h5>
+                <p>Coletamos dados pessoais fornecidos por você, como nome, endereço, telefone e informações religiosas, exclusivamente para fins de organização e gestão do Encontro de Casais com Cristo (ECC).</p>
+
+                <h5>2. Uso dos Dados</h5>
+                <p>Seus dados serão utilizados para:</p>
+                <ul>
+                    <li>Inscrição e gerenciamento de participantes no ECC;</li>
+                    <li>Comunicação sobre eventos e atualizações do encontro;</li>
+                    <li>Organização de círculos e equipes de trabalho;</li>
+                    <li>Gestão financeira relacionada ao evento.</li>
+                </ul>
+
+                <h5>3. Compartilhamento</h5>
+                <p>Seus dados não serão vendidos ou compartilhados com terceiros para fins comerciais. Podemos compartilhar informações com organizações parceiras do ECC, quando necessário para a execução do evento.</p>
+
+                <h5>4. Armazenamento e Segurança</h5>
+                <p>Seus dados são armazenados de forma segura e protegidos por medidas técnicas e administrativas adequadas.保留amos suas informações apenas pelo tempo necessário para os fins descritos.</p>
+
+                <h5>5. Seus Direitos</h5>
+                <p>Você tem direito a:</p>
+                <ul>
+                    <li>Acessar seus dados pessoais;</li>
+                    <li>Corrigir dados incorretos;</li>
+                    <li>Solicitar a exclusão de seus dados;</li>
+                    <li>Revogar o consentimento a qualquer momento.</li>
+                </ul>
+
+                <h5>6. Cookies</h5>
+                <p>Utilizamos cookies para melhorar sua experiência de navegação. Cookies são pequenos arquivos armazenados no seu navegador que nos ajudam a entender como você utiliza nosso site.</p>
+
+                <h5>7. Contato</h5>
+                <p>Para exercer seus direitos ou esclarecer dúvidas, entre em contato com nossa equipe pelo email: <strong>contato@eccaraguaina.com.br</strong></p>
+
+                <h5>8. Consentimento</h5>
+                <p>Ao utilizar nosso sistema, você consente com a coleta e uso de suas informações conforme descrito nesta política.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success" onclick="aceitarLGPD()" data-bs-dismiss="modal">
+                    <i class="fas fa-check me-1"></i> Concordo e Aceito
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function aceitarLGPD() {
+    document.getElementById('lgpd-banner').classList.remove('show');
+    localStorage.setItem('lgpd_aceito', 'true');
+}
+
+window.addEventListener('load', function() {
+    if (!localStorage.getItem('lgpd_aceito')) {
+        document.getElementById('lgpd-banner').classList.add('show');
+    }
+});
+</script>
 </body>
 </html>

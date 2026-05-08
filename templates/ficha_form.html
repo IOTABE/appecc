@@ -1,259 +1,110 @@
 {% extends 'base.html' %}
 
-{% block title %}Ficha de Inscrição (Ficha 43){% endblock %}
+{% block title %}Ficha de Inscrição{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-10 mt-4">
-        <div class="text-center mb-4">
-            <h2 class="fw-bold" style="color: var(--ecc-blue);">Ficha de Inscrição</h2>
-            {% if encontro %}
-                <span class="badge bg-primary fs-6 py-2 px-3 mb-2">ECC Nº {{ encontro.numero }}</span>
-                {% if ficha %}
-                    <span class="badge bg-success fs-6 py-2 px-3 mb-2">Ficha Nº {{ ficha.numero_ficha }}</span>
-                {% else %}
-                    <span class="badge bg-secondary fs-6 py-2 px-3 mb-2">Nova Ficha (número será gerado automaticamente)</span>
-                {% endif %}
-            {% else %}
-                <div class="alert alert-warning mt-3">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Nenhum encontro ativo no momento. Não é possível preencher a ficha.
-                </div>
-            {% endif %}
-            <p class="text-muted mt-2">Preencha os dados abaixo com atenção. Estas informações nos ajudarão a preparar o melhor encontro para você e sua família.</p>
+<div class="mb-3">
+    <h2 class="fw-bold mb-2" style="color: var(--ecc-blue);">Ficha de Inscrição</h2>
+    {% if encontro %}
+        <span class="badge bg-primary">{{ encontro.numero }}</span>
+        {% if ficha %}<span class="badge bg-success">{{ ficha.numero_ficha }}</span>{% endif %}
+    {% else %}
+        <div class="alert alert-warning mt-2">
+            <i class="fas fa-exclamation-triangle me-2"></i>Nenhum encontro ativo.
         </div>
-
-        {% if encontro %}
-        <form method="post" class="needs-validation">
-            {% csrf_token %}
-
-            <div class="row">
-                <!-- Convite -->
-                <div class="col-12 mb-4">
-                    <div class="card card-custom border-0 shadow-sm">
-                        <div class="card-header bg-warning text-dark pt-3 pb-2">
-                            <h5 class="mb-0"><i class="fas fa-user-friends me-2"></i>Informações do Convite</h5>
-                        </div>
-                        <div class="card-body row">
-                            <div class="col-md-8">
-                                <label class="form-label fw-bold">Casal que convidou</label>
-                                {{ form.casal_convidou }}
-                                <div class="form-text">Selecione o casal de encontreiros que fez o convite</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Dados do Marido -->
-                <div class="col-md-6 mb-4">
-                    <div class="card card-custom h-100 border-0 shadow-sm">
-                        <div class="card-header bg-primary text-white pt-3 pb-2">
-                            <h5 class="mb-0"><i class="fas fa-male me-2"></i>Dados do Marido</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Nome Completo <span class="text-danger">*</span></label>
-                                {{ form.nome_marido }}
-                                {% if form.nome_marido.errors %}<div class="text-danger small">{{ form.nome_marido.errors }}</div>{% endif %}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Nome para o Crachá</label>
-                                {{ form.nome_cracha_marido }}
-                                <div class="form-text">Como gostaria de ser chamado durante o encontro.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Data de Nascimento</label>
-                                {{ form.data_nascimento_marido }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Celular</label>
-                                {{ form.celular_marido }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Profissão</label>
-                                {{ form.profissao_marido }}
-                                {% if form.profissao_marido.errors %}<div class="text-danger small">{{ form.profissao_marido.errors }}</div>{% endif %}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Local de Trabalho</label>
-                                {{ form.local_trabalho_marido }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Religião</label>
-                                {{ form.religiao_marido }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Alergias (Alimentares ou Medicamentos)</label>
-                                {{ form.alergias_marido }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dados da Esposa -->
-                <div class="col-md-6 mb-4">
-                    <div class="card card-custom h-100 border-0 shadow-sm" style="border-top: 4px solid #e84393 !important;">
-                        <div class="card-header pt-3 pb-2" style="background-color: #fd79a8; color: white;">
-                            <h5 class="mb-0"><i class="fas fa-female me-2"></i>Dados da Esposa</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Nome Completo <span class="text-danger">*</span></label>
-                                {{ form.nome_esposa }}
-                                {% if form.nome_esposa.errors %}<div class="text-danger small">{{ form.nome_esposa.errors }}</div>{% endif %}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Nome para o Crachá</label>
-                                {{ form.nome_cracha_esposa }}
-                                <div class="form-text">Como gostaria de ser chamada durante o encontro.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Data de Nascimento</label>
-                                {{ form.data_nascimento_esposa }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Celular</label>
-                                {{ form.celular_esposa }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Profissão</label>
-                                {{ form.profissao_esposa }}
-                                {% if form.profissao_esposa.errors %}<div class="text-danger small">{{ form.profissao_esposa.errors }}</div>{% endif %}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Local de Trabalho</label>
-                                {{ form.local_trabalho_esposa }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Religião</label>
-                                {{ form.religiao_esposa }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Alergias (Alimentares ou Medicamentos)</label>
-                                {{ form.alergias_esposa }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Informações Gerais da Família -->
-                <div class="col-12 mb-4">
-                    <div class="card card-custom border-0 shadow-sm">
-                        <div class="card-header bg-secondary text-white pt-3 pb-2">
-                            <h5 class="mb-0"><i class="fas fa-home me-2"></i>Família e Saúde Geral</h5>
-                        </div>
-                        <div class="card-body row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Data de Casamento</label>
-                                {{ form.data_casamento }}
-                            </div>
-
-                            <div class="col-md-6 mb-3 d-flex align-items-center mt-md-4">
-                                <div class="form-check form-switch fs-5">
-                                    {{ form.casados_civil_religioso }}
-                                    <label class="form-check-label fw-bold ms-2" for="{{ form.casados_civil_religioso.id_for_label }}">Casados no civil e/ou religioso</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-bold">Quantidade de Filhos</label>
-                                {{ form.qtde_filhos }}
-                            </div>
-
-                            <div class="col-md-8 mb-3">
-                                <label class="form-label fw-bold">Filhos (Nomes e Idades)</label>
-                                {{ form.filhos_nomes_idades }}
-                                <div class="form-text">Ex: João (12 anos), Maria (8 anos)</div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Quem fica com os filhos durante o Encontro?</label>
-                                {{ form.quem_fica_com_filhos }}
-                                <div class="form-text">Ex: Avós, tios, babá, etc.</div>
-                            </div>
-
-                            <div class="col-md-6 mb-3 d-flex align-items-center mt-md-4">
-                                <div class="form-check form-switch fs-5">
-                                    {{ form.tem_veiculo }}
-                                    <label class="form-check-label fw-bold ms-2" for="{{ form.tem_veiculo.id_for_label }}">Possui veículo próprio?</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Medicação de Uso Contínuo</label>
-                                {{ form.medicacao_uso_continuo }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Outras Restrições Alimentares</label>
-                                {{ form.restricoes_alimentares }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Endereço e Contato -->
-                <div class="col-12 mb-4">
-                    <div class="card card-custom border-0 shadow-sm">
-                        <div class="card-header bg-info text-white pt-3 pb-2">
-                            <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Endereço e Contato</h5>
-                        </div>
-                        <div class="card-body row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Rua</label>
-                                {{ form.endereco_rua }}
-                            </div>
-
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label fw-bold">Número</label>
-                                {{ form.endereco_numero }}
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-bold">Bairro</label>
-                                {{ form.endereco_bairro }}
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label fw-bold">CEP</label>
-                                {{ form.endereco_cep }}
-                            </div>
-
-                            <div class="col-md-5 mb-3">
-                                <label class="form-label fw-bold">Cidade</label>
-                                {{ form.endereco_cidade }}
-                            </div>
-
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label fw-bold">UF</label>
-                                {{ form.endereco_uf }}
-                            </div>
-
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label fw-bold">Telefone Fixo</label>
-                                {{ form.telefone_residencial }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mb-5 mt-2">
-                <a href="{% url 'ficha_list' %}" class="btn btn-outline-secondary btn-lg px-4 py-3 rounded-pill me-3">
-                    <i class="fas fa-arrow-left me-2"></i>Voltar para Lista
-                </a>
-                <button type="submit" class="btn btn-success btn-lg px-5 py-3 rounded-pill shadow">
-                    <i class="fas fa-save me-2"></i>Salvar Ficha de Inscrição
-                </button>
-            </div>
-            
-        </form>
-        {% endif %}
-    </div>
+    {% endif %}
 </div>
+
+{% if encontro %}
+<form method="post" class="needs-validation">
+    {% csrf_token %}
+
+    <!-- Convite -->
+    <div class="card card-custom border-0 shadow-sm mb-3">
+        <div class="card-header bg-warning text-dark py-2">
+            <h6 class="mb-0"><i class="fas fa-user-friends me-2"></i>Quem convidou?</h6>
+        </div>
+        <div class="card-body pb-2">{{ form.casal_convidou }}</div>
+    </div>
+
+    <!-- Marido e Esposa -->
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6">
+            <div class="card card-custom border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white py-2">
+                    <h6 class="mb-0"><i class="fas fa-male me-2"></i>Marido</h6>
+                </div>
+                <div class="card-body pb-2">
+                    {% for field in form %}
+                        {% if 'marido' in field.id_for_label or field.name == 'nome_marido' %}
+                        <div class="mb-2">{{ field.label_tag }} {{ field }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card card-custom border-0 shadow-sm h-100" style="border-top: 3px solid #e84393;">
+                <div class="card-header py-2" style="background-color: #fd79a8; color: white;">
+                    <h6 class="mb-0"><i class="fas fa-female me-2"></i>Esposa</h6>
+                </div>
+                <div class="card-body pb-2">
+                    {% for field in form %}
+                        {% if 'esposa' in field.id_for_label or field.name == 'nome_esposa' %}
+                        <div class="mb-2">{{ field.label_tag }} {{ field }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Família -->
+    <div class="card card-custom border-0 shadow-sm mb-3">
+        <div class="card-header bg-secondary text-white py-2">
+            <h6 class="mb-0"><i class="fas fa-home me-2"></i>Família</h6>
+        </div>
+        <div class="card-body pb-2">
+            <div class="row g-2">
+                <div class="col-6 col-md-3">{{ form.data_casamento.label_tag }} {{ form.data_casamento }}</div>
+                <div class="col-6 col-md-3">{{ form.qtde_filhos.label_tag }} {{ form.qtde_filhos }}</div>
+                <div class="col-12 col-md-6">{{ form.filhos_nomes_idades.label_tag }} {{ form.filhos_nomes_idades }}</div>
+                <div class="col-6 col-md-3">{{ form.quem_fica_com_filhos.label_tag }} {{ form.quem_fica_com_filhos }}</div>
+                <div class="col-6 col-md-3 d-flex align-items-center mt-md-3">
+                    <div class="form-check">{{ form.tem_veiculo }} {{ form.tem_veiculo.label }}</div>
+                </div>
+                <div class="col-12">{{ form.restricoes_alimentares.label_tag }} {{ form.restricoes_alimentares }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Endereço -->
+    <div class="card card-custom border-0 shadow-sm mb-3">
+        <div class="card-header bg-info text-white py-2">
+            <h6 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Endereço</h6>
+        </div>
+        <div class="card-body pb-2">
+            <div class="row g-2">
+                <div class="col-8 col-md-6">{{ form.endereco_rua.label_tag }} {{ form.endereco_rua }}</div>
+                <div class="col-4 col-md-2">{{ form.endereco_numero.label_tag }} {{ form.endereco_numero }}</div>
+                <div class="col-6 col-md-4">{{ form.endereco_bairro.label_tag }} {{ form.endereco_bairro }}</div>
+                <div class="col-3 col-md-2">{{ form.endereco_cep.label_tag }} {{ form.endereco_cep }}</div>
+                <div class="col-5 col-md-4">{{ form.endereco_cidade.label_tag }} {{ form.endereco_cidade }}</div>
+                <div class="col-4 col-md-2">{{ form.endereco_uf.label_tag }} {{ form.endereco_uf }}</div>
+                <div class="col-12 col-md-4">{{ form.telefone_residencial.label_tag }} {{ form.telefone_residencial }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="d-grid d-md-flex gap-2 justify-content-md-end mt-4">
+        <a href="{% url 'ficha_list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Voltar
+        </a>
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-save me-2"></i>Salvar
+        </button>
+    </div>
+</form>
+{% endif %}
 {% endblock %}

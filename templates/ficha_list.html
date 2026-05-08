@@ -3,72 +3,65 @@
 {% block title %}Fichas de Inscrição{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
     <div>
-        <h2 class="fw-bold mb-1" style="color: var(--ecc-blue);">Fichas de Inscrição</h2>
+        <h2 class="fw-bold mb-1 mb-md-2" style="color: var(--ecc-blue);">Fichas de Inscrição</h2>
         {% if encontro %}
-            <span class="badge bg-primary fs-6 py-2 px-3">ECC Nº {{ encontro.numero }}</span>
-            <span class="text-muted ms-2">{{ encontro.data_inicio|date:"d/m/Y" }} — {{ encontro.data_fim|date:"d/m/Y" }}</span>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <span class="badge bg-primary">{{ encontro.numero }}</span>
+                <small class="text-muted">{{ encontro.data_inicio|date:"d/m/Y" }}</small>
+            </div>
         {% endif %}
     </div>
-    {% if encontro %}
-    <a href="{% url 'ficha_create' %}" class="btn btn-success btn-lg rounded-pill shadow-sm px-4">
-        <i class="fas fa-plus me-2"></i>Nova Ficha
+    {% if encontro and pode_gerenciar %}
+    <a href="{% url 'ficha_create' %}" class="btn btn-success rounded-pill shadow-sm px-3">
+        <i class="fas fa-plus me-2"></i>Nova
     </a>
     {% endif %}
 </div>
 
 {% if not encontro %}
-    <div class="alert alert-warning shadow-sm py-4 text-center">
-        <i class="fas fa-exclamation-triangle fa-2x mb-3 text-warning"></i>
-        <h5>Nenhum encontro ativo no momento.</h5>
-        <p class="mb-0">Cadastre um encontro com status "Em Planejamento" ou "Em Andamento" para gerenciar fichas.</p>
+    <div class="alert alert-warning shadow-sm py-3 text-center">
+        <i class="fas fa-exclamation-triangle me-2"></i>Nenhum encontro ativo.
     </div>
 {% elif not fichas %}
     <div class="alert alert-info shadow-sm py-4 text-center">
-        <i class="fas fa-clipboard-list fa-2x mb-3 text-info"></i>
-        <h5>Nenhuma ficha cadastrada ainda.</h5>
-        <p class="mb-0">Clique em <strong>"Nova Ficha"</strong> para começar a inscrever casais.</p>
+        <i class="fas fa-clipboard-list fa-2x mb-2 d-block"></i>
+        <h6>Nenhuma ficha cadastrada.</h6>
     </div>
 {% else %}
 
 <!-- Indicadores -->
-<div class="row mb-4">
-    <div class="col-md-4 mb-3">
-        <div class="card card-custom bg-white border-0 h-100 p-3" style="border-left: 5px solid var(--ecc-blue) !important;">
-            <div class="card-body d-flex align-items-center">
-                <div class="rounded-circle bg-light p-3 me-3">
-                    <i class="fas fa-file-alt fa-2x" style="color: var(--ecc-blue);"></i>
-                </div>
+<div class="row g-2 mb-3">
+    <div class="col-4">
+        <div class="card card-custom bg-white border-0 h-100 p-2" style="border-left: 4px solid var(--ecc-blue) !important;">
+            <div class="card-body p-2 d-flex align-items-center">
+                <i class="fas fa-file-alt me-2" style="color: var(--ecc-blue);"></i>
                 <div>
-                    <h6 class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.8rem;">Total de Fichas</h6>
-                    <h3 class="mb-0 fw-bold" style="color: var(--ecc-blue);">{{ fichas|length }}</h3>
+                    <small class="text-muted d-block">Total</small>
+                    <span class="fw-bold">{{ fichas|length }}</span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-3">
-        <div class="card card-custom bg-white border-0 h-100 p-3" style="border-left: 5px solid #2ecc71 !important;">
-            <div class="card-body d-flex align-items-center">
-                <div class="rounded-circle bg-light p-3 me-3">
-                    <i class="fas fa-check-circle text-success fa-2x"></i>
-                </div>
+    <div class="col-4">
+        <div class="card card-custom bg-white border-0 h-100 p-2" style="border-left: 4px solid #2ecc71 !important;">
+            <div class="card-body p-2 d-flex align-items-center">
+                <i class="fas fa-check-circle me-2 text-success"></i>
                 <div>
-                    <h6 class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.8rem;">Ativas</h6>
-                    <h3 class="mb-0 fw-bold text-success">{{ total_ativas }}</h3>
+                    <small class="text-muted d-block">Ativas</small>
+                    <span class="fw-bold text-success">{{ total_ativas }}</span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-3">
-        <div class="card card-custom bg-white border-0 h-100 p-3" style="border-left: 5px solid #e74c3c !important;">
-            <div class="card-body d-flex align-items-center">
-                <div class="rounded-circle bg-light p-3 me-3">
-                    <i class="fas fa-ban text-danger fa-2x"></i>
-                </div>
+    <div class="col-4">
+        <div class="card card-custom bg-white border-0 h-100 p-2" style="border-left: 4px solid #e74c3c !important;">
+            <div class="card-body p-2 d-flex align-items-center">
+                <i class="fas fa-ban me-2 text-danger"></i>
                 <div>
-                    <h6 class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.8rem;">Desabilitadas</h6>
-                    <h3 class="mb-0 fw-bold text-danger">{{ total_inativas }}</h3>
+                    <small class="text-muted d-block">Desab.</small>
+                    <span class="fw-bold text-danger">{{ total_inativas }}</span>
                 </div>
             </div>
         </div>
@@ -79,82 +72,49 @@
 <div class="card card-custom border-0 shadow-sm">
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" id="fichas-table">
+            <table class="table table-hover align-middle mb-0 table-sm">
                 <thead class="table-light">
                     <tr>
-                        <th class="ps-4" style="width: 80px;">Nº</th>
-                        <th>Marido</th>
-                        <th>Esposa</th>
-                        <th class="text-center">Crachá (Ele)</th>
-                        <th class="text-center">Crachá (Ela)</th>
-                        <th class="text-center">Celular</th>
-                        <th class="text-center" style="width: 100px;">Status</th>
-                        <th class="text-center pe-4" style="width: 160px;">Ações</th>
+                        <th class="ps-2" style="width: 50px;">Nº</th>
+                        <th>Casal</th>
+                        <th class="d-none d-md-table-cell text-center">Status</th>
+                        {% if pode_gerenciar %}<th class="text-center" style="width: 80px;">Ações</th>{% endif %}
                     </tr>
                 </thead>
                 <tbody>
                 {% for ficha in fichas %}
-                    <tr class="{% if not ficha.ativa %}table-secondary{% endif %}">
-                        <td class="ps-4">
-                            <span class="badge {% if ficha.ativa %}bg-primary{% else %}bg-secondary{% endif %} fs-6 px-3 py-2">
+                    <tr class="{% if not ficha.ativa %}table-secondary opacity-75{% endif %}">
+                        <td class="ps-2">
+                            <span class="badge {% if ficha.ativa %}bg-primary{% else %}bg-secondary{% endif %}">
                                 {{ ficha.numero_ficha }}
                             </span>
                         </td>
                         <td>
-                            <div class="fw-bold {% if not ficha.ativa %}text-muted text-decoration-line-through{% endif %}">
-                                {{ ficha.casal.nome_marido|default:"—" }}
-                            </div>
-                            <small class="text-muted">{{ ficha.profissao_marido|default:"" }}</small>
+                            <div class="fw-bold small">{{ ficha.casal.nome_marido|default:"—" }}</div>
+                            <div class="small" style="color: #e84393;">{{ ficha.casal.nome_esposa|default:"—" }}</div>
                         </td>
-                        <td>
-                            <div class="fw-bold {% if not ficha.ativa %}text-muted text-decoration-line-through{% endif %}">
-                                {{ ficha.casal.nome_esposa|default:"—" }}
-                            </div>
-                            <small class="text-muted">{{ ficha.profissao_esposa|default:"" }}</small>
-                        </td>
-                        <td class="text-center">
-                            <span class="text-primary fw-semibold">{{ ficha.nome_cracha_marido|default:"—" }}</span>
-                        </td>
-                        <td class="text-center">
-                            <span style="color: #e84393;" class="fw-semibold">{{ ficha.nome_cracha_esposa|default:"—" }}</span>
-                        </td>
-                        <td class="text-center">
-                            <small>{{ ficha.casal.celular_marido|default:"—" }}</small>
-                        </td>
-                        <td class="text-center">
+                        <td class="d-none d-md-table-cell text-center">
                             {% if ficha.ativa %}
-                                <span class="badge bg-success px-3 py-2">Ativa</span>
+                                <span class="badge bg-success">OK</span>
                             {% else %}
-                                <span class="badge bg-danger px-3 py-2">Desabilitada</span>
+                                <span class="badge bg-danger">OFF</span>
                             {% endif %}
                         </td>
-                        <td class="text-center pe-4">
-                            {% if user.is_authenticated %}
-                            <div class="btn-group" role="group">
-                                <a href="{% url 'ficha_edit' ficha.pk %}" 
-                                   class="btn btn-sm btn-outline-primary" 
-                                   title="Editar ficha">
+                        {% if pode_gerenciar %}
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-1">
+                                <a href="{% url 'ficha_edit' ficha.pk %}" class="btn btn-sm btn-outline-primary py-1 px-2">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form method="post" action="{% url 'ficha_toggle' ficha.pk %}" class="d-inline">
                                     {% csrf_token %}
-                                    {% if ficha.ativa %}
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" 
-                                            title="Desabilitar ficha"
-                                            onclick="return confirm('Deseja desabilitar a Ficha Nº {{ ficha.numero_ficha }}?')">
-                                        <i class="fas fa-ban"></i>
+                                    <button type="submit" class="btn btn-sm btn-outline-{% if ficha.ativa %}danger{% else %}success{% endif %} py-1 px-2">
+                                        <i class="fas fa-{% if ficha.ativa %}ban{% else %}check{% endif %}"></i>
                                     </button>
-                                    {% else %}
-                                    <button type="submit" class="btn btn-sm btn-outline-success" 
-                                            title="Reativar ficha"
-                                            onclick="return confirm('Deseja reativar a Ficha Nº {{ ficha.numero_ficha }}?')">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    {% endif %}
                                 </form>
                             </div>
-                            {% endif %}
                         </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
