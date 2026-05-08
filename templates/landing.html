@@ -24,7 +24,30 @@
             </div>
         {% endif %}
 
-        <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 py-3 rounded-pill shadow-sm" style="background-color: var(--ecc-blue); border-color: var(--ecc-blue);">
+        <!-- LGPD Banner -->
+        <div id="lgpd-banner" class="card border-0 shadow-sm mb-4 {% if request.COOKIES.lgpd_aceito %}d-none{% endif %}">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="bg-warning rounded-circle p-2 d-none d-md-block">
+                        <i class="fas fa-shield-alt fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-2"><i class="fas fa-lock me-2 text-warning d-md-none"></i>Proteção de Dados (LGPD)</h6>
+                        <p class="small mb-2">Prezamos pela sua privacidade. Ao acessar a Área do Encontreiro, você concorda com nossa política de proteção de dados.</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button onclick="aceitarLGPD()" class="btn btn-success btn-sm">
+                                <i class="fas fa-check me-1"></i> Aceito e Quero Continuar
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#lgpdModal">
+                                <i class="fas fa-file-alt me-1"></i> Ver Política
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="{% url 'login' %}" id="btn-login" class="btn btn-primary btn-lg px-4 py-3 rounded-pill shadow-sm {% if not request.COOKIES.lgpd_aceito %}disabled{% endif %}" style="background-color: var(--ecc-blue); border-color: var(--ecc-blue);">
             Área do Encontreiro <i class="fas fa-arrow-right ms-2"></i>
         </a>
     </div>
@@ -34,4 +57,66 @@
         </div>
     </div>
 </div>
+
+<!-- LGPD Modal -->
+<div class="modal fade" id="lgpdModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: var(--ecc-blue); color: white;">
+                <h5 class="modal-title"><i class="fas fa-shield-alt me-2"></i>Política de Privacidade - LGPD</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-primary"><i class="fas fa-database me-2"></i>1. Coleta de Dados</h6>
+                <p class="small">Coletamos dados pessoais fornecidos por você, como nome, endereço, telefone e informações religiosas, exclusivamente para fins de organização e gestão do Encontro de Casais com Cristo (ECC).</p>
+
+                <h6 class="text-primary"><i class="fas fa-cogs me-2"></i>2. Uso dos Dados</h6>
+                <p class="small mb-1">Seus dados serão utilizados para:</p>
+                <ul class="small">
+                    <li>Inscrição e gerenciamento de participantes no ECC;</li>
+                    <li>Comunicação sobre eventos e atualizações do encontro;</li>
+                    <li>Organização de círculos e equipes de trabalho;</li>
+                    <li>Gestão financeira relacionada ao evento.</li>
+                </ul>
+
+                <h6 class="text-primary"><i class="fas fa-share-alt me-2"></i>3. Compartilhamento</h6>
+                <p class="small">Seus dados <strong>não serão vendidos</strong> ou compartilhados com terceiros para fins comerciais. Podemos compartilhar informações com organizações parceiras do ECC, quando necessário para a execução do evento.</p>
+
+                <h6 class="text-primary"><i class="fas fa-lock me-2"></i>4. Segurança</h6>
+                <p class="small">Seus dados são armazenados de forma segura e protegidos por medidas técnicas e administrativas adequadas.</p>
+
+                <h6 class="text-primary"><i class="fas fa-user-shield me-2"></i>5. Seus Direitos</h6>
+                <ul class="small">
+                    <li>Acessar seus dados pessoais;</li>
+                    <li>Corrigir dados incorretos;</li>
+                    <li>Solicitar a exclusão de seus dados;</li>
+                    <li>Revogar o consentimento a qualquer momento.</li>
+                </ul>
+
+                <h6 class="text-primary"><i class="fas fa-cookie me-2"></i>6. Cookies</h6>
+                <p class="small">Utilizamos cookies para melhorar sua experiência de navegação. Você pode desativar os cookies nas configurações do seu navegador.</p>
+
+                <h6 class="text-primary"><i class="fas fa-envelope me-2"></i>7. Contato</h6>
+                <p class="small">Dúvidas? Entre em contato: <strong>contato@eccaraguaina.com.br</strong></p>
+
+                <hr>
+                <p class="small text-muted">Última atualização: {% now "d/m/Y" %}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success" onclick="aceitarLGPD()" data-bs-dismiss="modal">
+                    <i class="fas fa-check me-1"></i> Concordo e Aceito
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function aceitarLGPD() {
+    document.getElementById('lgpd-banner').classList.add('d-none');
+    document.getElementById('btn-login').classList.remove('disabled');
+    document.cookie = "lgpd_aceito=true; path=/; max-age=31536000";
+}
+</script>
 {% endblock %}

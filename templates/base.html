@@ -24,25 +24,6 @@
             background-color: var(--ecc-light);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow-x: hidden;
-            padding-bottom: 60px !important;
-        }
-        .lgpd-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #1a1a2e;
-            color: white;
-            padding: 1rem;
-            z-index: 9999;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            display: none;
-        }
-        .lgpd-banner.show {
-            display: block;
-        }
-        .lgpd-banner a {
-            color: var(--ecc-gold);
         }
         .navbar-custom {
             background-color: var(--ecc-blue);
@@ -154,11 +135,21 @@
                         <a class="nav-link" href="{% url 'ficha_list' %}"><i class="fas fa-file-alt me-1"></i>Fichas</a>
                     </li>
                     {% if user.is_superuser or user.perfil == 'PRESIDENTE' or user.perfil == 'TESOUREIRO' %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'financeiro_list' %}"><i class="fas fa-money-bill-wave me-1"></i>Financeiro</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="financeiroDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-money-bill-wave me-1"></i>Financeiro
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="financeiroDropdown">
+                            <li><a class="dropdown-item" href="{% url 'financeiro_list' %}"><i class="fas fa-list me-2"></i>Movimentações</a></li>
+                            <li><a class="dropdown-item" href="{% url 'balancete' %}"><i class="fas fa-file-invoice-dollar me-2"></i>Balancete</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'conta_list' %}"><i class="fas fa-calculator me-2"></i>Contas</a></li>
+                        </ul>
                     </li>
+                    {% endif %}
+                    {% if user.is_superuser or user.perfil == 'PRESIDENTE' or user.perfil == 'TESOUREIRO' or user.perfil == 'SECRETARIO' or user.perfil == 'COORDENADOR' %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'balancete' %}"><i class="fas fa-file-invoice-dollar me-1"></i>Balancete</a>
+                        <a class="nav-link" href="{% url 'convite_list' %}"><i class="fas fa-link me-1"></i>Convites</a>
                     </li>
                     {% endif %}
                     {% if user.is_superuser %}
@@ -194,93 +185,5 @@
 
 <!-- Bootstrap 5 JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- LGPD Banner -->
-<div id="lgpd-banner" class="lgpd-banner">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-12 col-md-9">
-                <p class="mb-1 mb-md-0">
-                    <i class="fas fa-shield-alt me-2"></i>
-                    <strong>Aviso de Privacidade:</strong> Utilizamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa 
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#lgpdModal">Política de Privacidade</a>.
-                </p>
-            </div>
-            <div class="col-12 col-md-3 text-md-end mt-2 mt-md-0">
-                <button onclick="aceitarLGPD()" class="btn btn-success btn-sm px-3">
-                    <i class="fas fa-check me-1"></i> Aceitar
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- LGPD Modal -->
-<div class="modal fade" id="lgpdModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: var(--ecc-blue); color: white;">
-                <h5 class="modal-title"><i class="fas fa-shield-alt me-2"></i>Política de Privacidade e Uso de Dados</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <h5>1. Coleta de Dados</h5>
-                <p>Coletamos dados pessoais fornecidos por você, como nome, endereço, telefone e informações religiosas, exclusivamente para fins de organização e gestão do Encontro de Casais com Cristo (ECC).</p>
-
-                <h5>2. Uso dos Dados</h5>
-                <p>Seus dados serão utilizados para:</p>
-                <ul>
-                    <li>Inscrição e gerenciamento de participantes no ECC;</li>
-                    <li>Comunicação sobre eventos e atualizações do encontro;</li>
-                    <li>Organização de círculos e equipes de trabalho;</li>
-                    <li>Gestão financeira relacionada ao evento.</li>
-                </ul>
-
-                <h5>3. Compartilhamento</h5>
-                <p>Seus dados não serão vendidos ou compartilhados com terceiros para fins comerciais. Podemos compartilhar informações com organizações parceiras do ECC, quando necessário para a execução do evento.</p>
-
-                <h5>4. Armazenamento e Segurança</h5>
-                <p>Seus dados são armazenados de forma segura e protegidos por medidas técnicas e administrativas adequadas.保留amos suas informações apenas pelo tempo necessário para os fins descritos.</p>
-
-                <h5>5. Seus Direitos</h5>
-                <p>Você tem direito a:</p>
-                <ul>
-                    <li>Acessar seus dados pessoais;</li>
-                    <li>Corrigir dados incorretos;</li>
-                    <li>Solicitar a exclusão de seus dados;</li>
-                    <li>Revogar o consentimento a qualquer momento.</li>
-                </ul>
-
-                <h5>6. Cookies</h5>
-                <p>Utilizamos cookies para melhorar sua experiência de navegação. Cookies são pequenos arquivos armazenados no seu navegador que nos ajudam a entender como você utiliza nosso site.</p>
-
-                <h5>7. Contato</h5>
-                <p>Para exercer seus direitos ou esclarecer dúvidas, entre em contato com nossa equipe pelo email: <strong>contato@eccaraguaina.com.br</strong></p>
-
-                <h5>8. Consentimento</h5>
-                <p>Ao utilizar nosso sistema, você consente com a coleta e uso de suas informações conforme descrito nesta política.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-success" onclick="aceitarLGPD()" data-bs-dismiss="modal">
-                    <i class="fas fa-check me-1"></i> Concordo e Aceito
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function aceitarLGPD() {
-    document.getElementById('lgpd-banner').classList.remove('show');
-    localStorage.setItem('lgpd_aceito', 'true');
-}
-
-window.addEventListener('load', function() {
-    if (!localStorage.getItem('lgpd_aceito')) {
-        document.getElementById('lgpd-banner').classList.add('show');
-    }
-});
-</script>
 </body>
 </html>
