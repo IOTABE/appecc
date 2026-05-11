@@ -85,7 +85,7 @@ class MovimentacaoForm(forms.ModelForm):
 class ContaContabilForm(forms.ModelForm):
     class Meta:
         model = ContaContabil
-        fields = ['codigo', 'nome', 'tipo', 'nivel', 'conta_pai']
+        fields = ['codigo', 'nome', 'tipo', 'nivel', 'natureza_da_conta', 'conta_pai']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

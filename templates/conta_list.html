@@ -35,6 +35,9 @@
                                 {% else %}
                                 <span class="badge bg-light text-dark ms-2">Sintética</span>
                                 {% endif %}
+                                <span class="badge {% if conta.natureza_da_conta == 'D' %}bg-danger{% else %}bg-info{% endif %} ms-2" title="Natureza da Conta">
+                                    {{ conta.natureza_da_conta }}
+                                </span>
                             </td>
                             <td class="text-end">
                                 <a href="{% url 'conta_edit' conta.pk %}" class="btn btn-sm btn-outline-primary">

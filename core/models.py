@@ -26,6 +26,9 @@ class Casal(AbstractUser):
     associado = models.BooleanField(default=False, help_text="É um encontreiro associado ativo?")
     perfil = models.CharField(max_length=20, choices=PERFIL_CHOICES, blank=True, verbose_name="Perfil na Diretoria")
 
+    def __str__(self):
+        return f"{self.nome_marido} e {self.nome_esposa}"
+
 class FichaInscricao(models.Model):
     """
     Ficha de Inscrição vinculada a um Encontro específico.
@@ -119,6 +122,9 @@ class Encontro(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PLANEJAMENTO')
     valor_inscricao = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Valor da Inscrição")
 
+    def __str__(self):
+        return f"{self.numero}º Encontro de Casais com Cristo"
+
 class FichaConvite(models.Model):
     """Fichas adquiridas por Encontreiros para convidar novos casais."""
     patrocinador = models.ForeignKey(Casal, on_delete=models.PROTECT, related_name='fichas_patrocinadas')
@@ -130,6 +136,8 @@ class FichaConvite(models.Model):
     token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     nome_casal_convidado = models.CharField(max_length=150, blank=True, verbose_name="Nome do Casal Convidado")
 
+    def __str__(self):
+        return f"Ficha Convite #{self.token}"
 
 class Circulo(models.Model):
     CORES = [
@@ -143,21 +151,32 @@ class Circulo(models.Model):
     casal_coordenador = models.ForeignKey(Casal, on_delete=models.SET_NULL, null=True, related_name='circulos_coordenados')
     casais = models.ManyToManyField(Casal, related_name='circulos_participantes', blank=True)
 
+    def __str__(self):
+        return f"Círculo {self.cor} - {self.encontro}"
+
 class EquipeTrabalho(models.Model):
     nome = models.CharField(max_length=100) # Ex: Cozinha, Boa Vontade, Louvor
     encontro = models.ForeignKey(Encontro, on_delete=models.CASCADE, related_name='equipes')
     casais = models.ManyToManyField(Casal, related_name='equipes_trabalho')
+
+    def __str__(self):
+        return f"Equipe {self.nome} - {self.encontro}"
 
 # --- ENGINE FINANCEIRA ---
 
 class ContaContabil(models.Model):
     TIPO_CHOICES = [('ATIVO', 'Ativo'), ('PASSIVO', 'Passivo'), ('RECEITA', 'Receita'), ('DESPESA', 'Despesa')]
     NIVEL_CHOICES = [(1, 'Nível 1'), (2, 'Nível 2'), (3, 'Nível 3 - Analítica')]
+    NATUREZA_DA_CONTA_CHOICES = [
+        ('D', 'Débito'), 
+        ('C', 'Crédito')
+    ]
 
     codigo = models.CharField(max_length=20, unique=True, help_text="Código da conta (ex: 1.0.0)")
     nome = models.CharField(max_length=100)
     tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
     nivel = models.PositiveSmallIntegerField(choices=NIVEL_CHOICES, default=1)
+    natureza_da_conta = models.CharField(max_length=10, choices=NATUREZA_DA_CONTA_CHOICES)
     conta_pai = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subcontas')
 
     class Meta:
@@ -185,9 +204,15 @@ class MovimentacaoFinanceira(models.Model):
     descricao = models.CharField(max_length=255)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def __str__(self):
+        return f"Movimentação #{self.id} - {self.descricao}"
+
 class LancamentoContabil(models.Model):
     TIPO_LANCAMENTO = [('D', 'Débito'), ('C', 'Crédito')]
     movimentacao = models.ForeignKey(MovimentacaoFinanceira, on_delete=models.CASCADE, related_name='lancamentos')
     conta = models.ForeignKey(ContaContabil, on_delete=models.PROTECT)
     tipo = models.CharField(max_length=1, choices=TIPO_LANCAMENTO)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Lançamento #{self.id} - {self.tipo} {self.valor}"

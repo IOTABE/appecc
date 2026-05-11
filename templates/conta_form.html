@@ -48,6 +48,13 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label fw-bold">Natureza da Conta <span class="text-danger">*</span></label>
+                        {{ form.natureza_da_conta }}
+                        <div class="form-text">Define se a conta aceita lançamentos a Débito ou a Crédito</div>
+                        {% if form.natureza_da_conta.errors %}<div class="text-danger small">{{ form.natureza_da_conta.errors }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label fw-bold">Conta Pai</label>
                         {{ form.conta_pai }}
                         <div class="form-text">Selecione a conta de nível superior (obrigatório para Níveis 2 e 3)</div>
